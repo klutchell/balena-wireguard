@@ -12,8 +12,9 @@ ENV VERSION "2.47.0+rev1.prod"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-RUN curl -L "$(echo "https://files.balena-cloud.com/images/${BALENA_MACHINE_NAME}/${VERSION}/kernel_modules_headers.tar.gz" | sed -e 's/+/%2B/')" | tar xvz \
-    && make -C /usr/src/kernel_modules_headers -j"$(nproc)" modules_prepare 
+RUN curl -L "https://files.balena-cloud.com/images/${BALENA_MACHINE_NAME}/${VERSION/+/%2B}/kernel_modules_headers.tar.gz" | tar xvz
+
+RUN make -C /usr/src/kernel_modules_headers -j"$(nproc)" modules_prepare
 
 FROM linuxserver/wireguard:v1.0.20200513-ls22
 
