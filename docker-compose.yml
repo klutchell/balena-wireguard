@@ -2,7 +2,6 @@ version: "2.1"
 
 volumes:
   config:
-  duplicati:
 
 services:
   wireguard:
@@ -14,16 +13,3 @@ services:
       - config:/config
     labels:
       io.balena.features.kernel-modules: '1'
-
-  # https://hub.docker.com/r/linuxserver/duplicati
-  duplicati:
-    image: linuxserver/duplicati:arm64v8-latest
-    environment:
-      PUID: "0"
-      PGID: "0"
-      CLI_ARGS: --webservice-interface=any
-    ports:
-      - 8200:8200/tcp
-    volumes:
-      - duplicati:/config
-      - config:/source/config:ro

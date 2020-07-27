@@ -56,6 +56,7 @@ Kyle Harding <https://klutchell.dev>
 ## References
 
 - <https://www.wireguard.com/compilation/>
+- <https://www.balena.io/blog/how-to-run-wireguard-vpn-in-balenaos/>
 
 ## License
 
