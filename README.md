@@ -4,7 +4,7 @@
 
 ## Requirements
 
-- Raspberry Pi 3/4 or similar device supported by BalenaCloud
+- Raspberry Pi 3 or similar `armv7hf` device supported by BalenaCloud
 
 ## Getting Started
 
@@ -38,14 +38,6 @@ Application envionment variables apply to all services within the application, a
 ## Contributing
 
 Please open an issue or submit a pull request with any features, fixes, or changes.
-
-## Author
-
-Kyle Harding <https://klutchell.dev>
-
-[Buy me a beer](https://kyles-tip-jar.myshopify.com/cart/31356319498262:1?channel=buy_button)
-
-[Buy me a craft beer](https://kyles-tip-jar.myshopify.com/cart/31356317859862:1?channel=buy_button)
 
 ## Acknowledgments
 
