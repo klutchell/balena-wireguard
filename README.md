@@ -33,6 +33,15 @@ Application envionment variables apply to all services within the application, a
 
 ## Usage
 
+On first boot, the image will attempt to download the compatible kernel headers
+and compile the wireguard module. You will see errors in the device logs if this fails
+for due to incompatible kernels, or related reasons.
+
+On subsequent app restarts, the existing kernel module will be retained, as long as
+the device does not reboot.
+
+Further wireguard usage instructions for this image can be found here:
+
 <https://docs.linuxserver.io/images/docker-wireguard>
 
 ## Contributing
