@@ -2,21 +2,27 @@
 
 [wireguard](https://www.wireguard.com/) stack for balenaCloud
 
-## Requirements
+## Hardware required
 
-- Raspberry Pi 3 or similar `armv7hf` device supported by BalenaCloud
+- Raspberry Pi 3/3b/3b+ (note that 64-bit OS is not supported yet)
+
+Note that this image has a hardcoded balenaOS version in the Dockerfile(s).
+If your device is not running this version the wireguard module may fail to load.
+If this is the case you can try to change the version to match your device
+by removing the `v` prefix and replacing `+` is with `%2B`.
+
+eg. `v2.67.3+rev4.prod` --> `2.67.3%2Brev4.prod`
 
 ## Getting Started
 
-To get started you'll first need to sign up for a free balenaCloud account and flash your device.
+You can one-click-deploy this project to balena using the button below:
 
-<https://www.balena.io/docs/learn/getting-started>
+[![deploy with balena](https://balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/klutchell/balena-wireguard&defaultDeviceType=raspberrypi3)
 
-## Deployment
+## Manual Deployment
 
-Deployment is carried out by downloading the project and pushing it to your device either via Git or the balena CLI.
-
-<https://www.balena.io/docs/reference/balena-cli/>
+Alternatively, deployment can be carried out by manually creating a [balenaCloud account](https://dashboard.balena-cloud.com) and application,
+flashing a device, downloading the project and pushing it via either Git or the [balena CLI](https://github.com/balena-io/balena-cli).
 
 ### Application Environment Variables
 
@@ -24,7 +30,6 @@ Application envionment variables apply to all services within the application, a
 
 | Name              | Example                | Purpose                                                                                                                                                                    |
 | ----------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `TZ`              | `America/Toronto`      | Specify a timezone to use.                                                                                                                                                 |
 | `SERVERURL`       | `wireguard.domain.com` | External IP or domain name for docker host. Used in server mode. If set to auto, the container will try to determine and set the external IP automatically.                |
 | `SERVERPORT`      | `51820`                | External port for docker host. Used in server mode.                                                                                                                        |
 | `PEERS`           | `4`                    | Number of peers to create confs for. Required for server mode.                                                                                                             |
@@ -33,12 +38,11 @@ Application envionment variables apply to all services within the application, a
 
 ## Usage
 
-On first boot, the image will attempt to download the compatible kernel headers
-and compile the wireguard module. You will see errors in the device logs if this fails
-for due to incompatible kernels, or related reasons.
-
-On subsequent app restarts, the existing kernel module will be retained, as long as
-the device does not reboot.
+If the environment variable `PEERS` is set to a number or a list of strings separated by comma,
+the container will run in server mode and the necessary server and peer/client confs will be generated.
+The peer/client config qr codes will be output in the docker log. They will also be saved in text and
+png format under `/config/peerX` in case `PEERS` is a variable and an integer or `/config/peer_X` in case a
+list of names was provided instead of an integer.
 
 Further wireguard usage instructions for this image can be found here:
 
@@ -48,17 +52,10 @@ Further wireguard usage instructions for this image can be found here:
 
 Please open an issue or submit a pull request with any features, fixes, or changes.
 
-## Acknowledgments
+## References
 
+- <https://www.balena.io/blog/how-to-run-wireguard-vpn-in-balenaos/>
+- <https://www.wireguard.com/compilation/>
 - <https://github.com/linuxserver/docker-wireguard>
 - <https://github.com/balena-os/kernel-module-build>
 - <https://github.com/jaredallard-home/wireguard-balena-rpi>
-
-## References
-
-- <https://www.wireguard.com/compilation/>
-- <https://www.balena.io/blog/how-to-run-wireguard-vpn-in-balenaos/>
-
-## License
-
-[MIT License](./LICENSE)
