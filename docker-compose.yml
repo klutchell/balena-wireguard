@@ -6,10 +6,14 @@ volumes:
 services:
   wireguard:
     build: .
-    privileged: true
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
     ports:
       - 51820:51820/udp
     volumes:
       - config:/config
     labels:
       io.balena.features.kernel-modules: '1'
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
