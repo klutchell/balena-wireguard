@@ -1,4 +1,4 @@
-FROM linuxserver/wireguard:arm32v7-version-v1.0.20200827 as build
+FROM linuxserver/wireguard:arm32v7-version-v1.0.20210223 as build
 
 WORKDIR /usr/src/app
 
@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
 
 ARG BALENA_MACHINE_NAME=raspberrypi3
 # to change the version drop the v prefix and replace + with %2B
-ARG BALENA_OS_VERSION=2.67.3%2Brev4.prod
+ARG BALENA_OS_VERSION=2.69.1%2Brev1.prod
 
 # hadolint ignore=DL4006
 RUN curl -L "https://files.balena-cloud.com/images/${BALENA_MACHINE_NAME}/${BALENA_OS_VERSION}/kernel_modules_headers.tar.gz" | tar xz
@@ -20,7 +20,7 @@ RUN make -C kernel_modules_headers -j"$(nproc)" modules_prepare
 
 RUN make -C kernel_modules_headers M=/app/wireguard-linux-compat/src -j"$(nproc)"
 
-FROM linuxserver/wireguard:arm32v7-version-v1.0.20200827 as run
+FROM linuxserver/wireguard:arm32v7-version-v1.0.20210223 as run
 
 COPY --from=build /app/wireguard-linux-compat/src/wireguard.ko /app/wireguard-linux-compat/src/wireguard.ko
 
