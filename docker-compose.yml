@@ -4,16 +4,29 @@ volumes:
   config:
 
 services:
-  wireguard:
-    build: .
+  web:
+    image: vx3r/wg-gen-web:latest
+    ports:
+      - 80:8080/tcp
+    volumes:
+      - config:/data
+    environment:
+      - WG_CONF_DIR=/data
+      - WG_INTERFACE_NAME=wg0.conf
+
+  userspace:
+    build: userspace
+    network_mode: host
     cap_add:
       - NET_ADMIN
-      - SYS_MODULE
-    ports:
-      - 51820:51820/udp
+      - SYS_ADMIN
     volumes:
-      - config:/config
+      - config:/etc/wireguard
+
+  module:
+    build: module
+    cap_add:
+      - SYS_MODULE
     labels:
       io.balena.features.kernel-modules: '1'
-    sysctls:
-      - net.ipv4.conf.all.src_valid_mark=1
+    restart: on-failure
