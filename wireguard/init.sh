@@ -1,5 +1,16 @@
 #!/bin/sh
 
+# dump module info to logs
+modinfo /usr/src/app/wireguard.ko
+
+# load required modules
+modprobe udp_tunnel  
+modprobe ip6_udp_tunnel
+
+# load wireguard module and grep dmesg to logs
+insmod /usr/src/app/wireguard.ko || true
+dmesg | grep wireguard
+
 trap "wg-quick down wg0" TERM INT QUIT EXIT
 
 mkdir -p /dev/net

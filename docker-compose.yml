@@ -14,19 +14,17 @@ services:
       - WG_CONF_DIR=/data
       - WG_INTERFACE_NAME=wg0.conf
 
-  userspace:
-    build: userspace
+  wireguard:
+    build: wireguard
     network_mode: host
-    cap_add:
-      - NET_ADMIN
-      - SYS_ADMIN
+    privileged: true
+    # cap_add:
+    #   - NET_ADMIN
+    #   - SYS_ADMIN
+    #   - SYS_MODULE
     volumes:
       - config:/etc/wireguard
-
-  module:
-    build: module
-    cap_add:
-      - SYS_MODULE
     labels:
       io.balena.features.kernel-modules: '1'
-    restart: on-failure
+    sysctls:
+      - net.ipv4.ip_forward=1
