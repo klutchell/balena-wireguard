@@ -1,0 +1,27 @@
+#!/bin/sh
+
+if [ ! $# -gt 0 ]
+then
+    echo "You need to specify which peers to show"
+    exit 0
+fi
+
+case "$@" in
+   (*[!0-9]*|'') PEERS=$(echo "$@" | tr ',' ' ') ;;
+   (*)           PEERS=$(seq 1 "$@") ;;
+esac
+
+config_root=/etc/wireguard
+
+for peer in ${PEERS}
+do
+    PEER_ID="peer_$(echo "${peer}" | sed 's/[^[:alnum:]_-]//g')"
+
+    if grep -q "# ${peer}" "${config_root}"/wg0.conf
+    then
+        echo "PEER ${peer} QR code:"
+        qrencode -t ansiutf8 < "${config_root}"/"${PEER_ID}".conf
+    else
+        echo "PEER ${peer} is not active"
+    fi
+done
