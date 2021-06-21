@@ -1,29 +1,57 @@
-FROM ghcr.io/linuxserver/wireguard:arm32v7-v1.0.20210424-ls30 AS build
+FROM balenalib/raspberrypi3-alpine-golang:1.15.11-3.13-build-20210506 as build
+
+RUN install_packages build-base curl libmnl-dev iptables flex bison bc python3 kmod
 
 WORKDIR /usr/src/app
 
-ENV DEBIAN_FRONTEND noninteractive
+ARG WG_GO_TAG=0.0.20210212
+ARG WG_TOOLS_TAG=v1.0.20210424
+ARG WG_LINUX_TAG=v1.0.20210606
 
-# hadolint ignore=DL3008
-RUN apt-get update && apt-get install --no-install-recommends -y \
-    curl build-essential libelf-dev libssl-dev pkg-config git flex bison bc python kmod && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
-
-ARG BALENA_MACHINE_NAME=raspberrypi3
 # to change the version drop the v prefix and replace + with %2B
+# eg v2.69.1+rev1 => 2.69.1%2Brev1.prod
 ARG BALENA_OS_VERSION=2.80.3%2Brev1.prod
+ARG BALENA_MACHINE_NAME=raspberrypi3
 
-# hadolint ignore=DL4006
-RUN curl -L "https://files.balena-cloud.com/images/${BALENA_MACHINE_NAME}/${BALENA_OS_VERSION}/kernel_modules_headers.tar.gz" | tar xz
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
-RUN make -C kernel_modules_headers -j"$(nproc)" modules_prepare
+RUN curl -L https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-${WG_GO_TAG}.tar.xz | tar xJ && \
+    curl -L https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${WG_TOOLS_TAG}.tar.xz | tar xJ && \
+    curl -L https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-${WG_LINUX_TAG}.tar.xz | tar xJ && \
+    curl -L https://files.balena-cloud.com/images/${BALENA_MACHINE_NAME}/${BALENA_OS_VERSION}/kernel_modules_headers.tar.gz | tar xz
 
-RUN make -C kernel_modules_headers M=/app/wireguard-linux-compat/src -j"$(nproc)"
+# build and install wireguard-go
+RUN make -C wireguard-go-${WG_GO_TAG} -j"$(nproc)" && \
+    make -C wireguard-go-${WG_GO_TAG} install
 
-FROM ghcr.io/linuxserver/wireguard:arm32v7-v1.0.20210424-ls30 AS run
+ARG WITH_WGQUICK=yes
 
-COPY --from=build /app/wireguard-linux-compat/src/wireguard.ko /app/wireguard-linux-compat/src/wireguard.ko
+# build and install wireguard-tools
+RUN make -C wireguard-tools-${WG_TOOLS_TAG}/src -j"$(nproc)" && \
+    make -C wireguard-tools-${WG_TOOLS_TAG}/src install
 
-COPY insmod.sh /etc/cont-init.d/20-insmod
+# build wireguard kernel module
+RUN make -C kernel_modules_headers modules_prepare -j"$(nproc)" && \
+    make -C kernel_modules_headers M=/usr/src/app/wireguard-linux-compat-${WG_LINUX_TAG}/src -j"$(nproc)"
 
-RUN chmod +x /etc/cont-init.d/20-insmod
+FROM balenalib/raspberrypi3-alpine:3.13-run-20210602 AS run
+
+RUN install_packages bash libmnl iptables openresolv iproute2 inotify-tools kmod libqrencode gettext
+
+WORKDIR /usr/src/app
+
+COPY --from=build /usr/bin/wireguard-go /usr/bin/wg* /usr/bin/
+COPY --from=build /usr/src/app/wireguard-linux-compat-*/src/wireguard.ko .
+
+COPY init.sh server.conf peer.conf ./
+
+COPY show-peer /usr/bin/
+
+RUN chmod +x init.sh /usr/bin/show-peer
+
+CMD [ "/usr/src/app/init.sh" ]
+
+ENV BALENA_HOSTNAME wireguard
+
+# set log level for userspace module
+ENV LOG_LEVEL verbose
