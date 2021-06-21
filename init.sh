@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# set a hostname for mDNS (default to nextcloud.local)
+# set a hostname for mDNS (default to wireguard.local)
 if [ -n "${BALENA_HOSTNAME}" ]
 then
     curl -X PATCH --header "Content-Type:application/json" \
