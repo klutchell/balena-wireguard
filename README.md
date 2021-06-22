@@ -36,10 +36,6 @@ Once your device joins the fleet you'll need to allow some time for it to downlo
 
 When it's done you can display QR codes for each peer by running `show-peer <peer>` in the container shell.
 
-```bash
-echo "show-peer 1 ; exit" | balena ssh wireguard.local wireguard
-```
-
 Additional usage instructions for wireguard can be found here: <https://www.wireguard.com/quickstart/>
 
 ## Contributing
