@@ -60,7 +60,7 @@ ENV PEER_DNS "1.1.1.1"
 ENV PEERS "1"
 
 # set a hostname for mDNS (default to wireguard.local)
-ENV BALENA_HOSTNAME "wireguard"
+ENV DEVICE_HOSTNAME "wireguard"
 
 # set log level for userspace module
 ENV LOG_LEVEL "verbose"
