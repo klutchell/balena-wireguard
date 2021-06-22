@@ -1,4 +1,6 @@
-#!/bin/sh
+#!/bin/bash
+
+set -euo pipefail
 
 # set a hostname for mDNS (default to wireguard.local)
 if [ -n "${BALENA_HOSTNAME}" ]
@@ -30,11 +32,23 @@ dmesg | grep wireguard
 
 mkdir -p "${config_root}"
 
-SERVER_PORT=${SERVER_PORT:-51820}
-INTERNAL_SUBNET=${INTERNAL_SUBNET:-10.13.13.0}
-INTERFACE=$(echo "${INTERNAL_SUBNET}" | awk 'BEGIN{FS=OFS="."} NF--')
-ALLOWEDIPS=${ALLOWEDIPS:-0.0.0.0/0, ::/0}
-PEER_DNS=${PEER_DNS:-1.1.1.1}
+ipcalc_network() {
+    ipcalc -n -b "$@" | grep Network: | awk '{print $2}'
+}
+
+ipcalc_hostmin() {
+    ipcalc -n -b "$@" | grep HostMin: | awk '{print $2}'
+}
+
+ipcalc_hostmax() {
+    ipcalc -n -b "$@" | grep HostMax: | awk '{print $2}'
+}
+
+prips() {
+    IFS=. read -r a b c d <<< "$(ipcalc_hostmin "$@")"
+    IFS=. read -r e f g h <<< "$(ipcalc_hostmax "$@")"
+    eval "echo {$a..$e}.{$b..$f}.{$c..$g}.{$d..$h}"
+}
 
 # lookup public ip if server host is not provided
 if [ -z "${SERVER_HOST}" ] || [ "${SERVER_HOST}" = "auto" ]
@@ -49,11 +63,13 @@ then
     wg genkey | tee "${server_key_path}" | wg pubkey > "${server_pub_path}"
 fi
 
+NETWORK="$(ipcalc_network "${NETWORK}")"
+SERVER_ADDRESS="$(ipcalc_hostmin "${NETWORK}")"
 SERVER_PRIVKEY="$(cat "${server_key_path}")"
 SERVER_PUBKEY="$(cat "${server_pub_path}")"
 
 # substitute env vars in server template conf
-export INTERFACE SERVER_PRIVKEY
+export SERVER_ADDRESS SERVER_PRIVKEY
 envsubst < "${server_template}" > "${server_conf_path}"
 
 # determine if peers is a number or a list of names
@@ -65,7 +81,7 @@ esac
 for peer in ${PEERS}
 do
     # peer_id is used for filenames so remove special characters
-    peer_id="peer_$(echo "${peer}" | sed 's/[^[:alnum:]_-]//g')"
+    peer_id="peer_${peer//[^[:alnum:]_-]/}"
     peer_key_path="${config_root}"/"${peer_id}".key
     peer_pub_path="${config_root}"/"${peer_id}".pub
     peer_conf_path="${config_root}"/"${peer_id}".conf
@@ -84,11 +100,16 @@ do
     then
         # reuse the IP address is config already exists for this peer
         PEER_ADDRESS=$(grep "Address" "${peer_conf_path}" | awk '{print $NF}')
-    else
-        for i in $(seq 2 254)
+    fi
+
+    # assign a new IP if peer address does not match the internal subnet
+    if [ "$(ipcalc_network "${PEER_ADDRESS}")" != "${NETWORK}" ]
+    then
+        for addr in $(prips "${NETWORK}")
         do
             # determine the first unused IP address
-            PEER_ADDRESS="${INTERFACE}.${i}"
+            [ "${addr}" = "${SERVER_ADDRESS}" ] && continue
+            PEER_ADDRESS="${addr}"
             grep -q -R "${PEER_ADDRESS}" "${config_root}"/*.conf || break
         done
     fi
