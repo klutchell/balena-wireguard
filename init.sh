@@ -95,6 +95,7 @@ do
 
     PEER_PRIVKEY="$(cat "${peer_key_path}")"
     PEER_PUBKEY="$(cat "${peer_pub_path}")"
+    PEER_ADDRESS=
 
     if [ -f "${peer_conf_path}" ]
     then
@@ -108,7 +109,6 @@ do
         for addr in $(prips "${NETWORK}")
         do
             # determine the first unused IP address
-            [ "${addr}" = "${SERVER_ADDRESS}" ] && continue
             PEER_ADDRESS="${addr}"
             grep -q -R "${PEER_ADDRESS}" "${config_root}"/*.conf || break
         done

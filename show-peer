@@ -6,14 +6,9 @@ then
     exit 0
 fi
 
-case "$@" in
-   (*[!0-9]*|'') PEERS=$(echo "$@" | tr ',' ' ') ;;
-   (*)           PEERS=$(seq 1 "$@") ;;
-esac
-
 config_root=/etc/wireguard
 
-for peer in ${PEERS}
+for peer in $(echo "$@" | tr ',' ' ')
 do
     PEER_ID="peer_$(echo "${peer}" | sed 's/[^[:alnum:]_-]//g')"
 
