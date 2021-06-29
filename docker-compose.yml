@@ -19,3 +19,17 @@ services:
     labels:
       - io.balena.features.kernel-modules=1
       - io.balena.features.supervisor-api=1
+
+  fbcp:
+    image: balenablocks/fbcp
+    privileged: true
+
+  glances:
+    image: klutchell/glances:3.1.7
+    privileged: true
+    network_mode: host
+    pid: host
+    labels:
+      io.balena.features.dbus: "1"
+    depends_on:
+      - fbcp
