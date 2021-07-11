@@ -5,7 +5,7 @@ set -euo pipefail
 # set a hostname for mDNS (default to wireguard.local)
 if [ -n "${DEVICE_HOSTNAME}" ]
 then
-    curl -X PATCH --header "Content-Type:application/json" \
+    curl -v -w "\n" -X PATCH --header "Content-Type:application/json" \
         --data "{\"network\": {\"hostname\": \"${DEVICE_HOSTNAME}\"}}" \
         "${BALENA_SUPERVISOR_ADDRESS}/v1/device/host-config?apikey=${BALENA_SUPERVISOR_API_KEY}" || true
 fi
@@ -23,7 +23,7 @@ server_pub_path="${config_root}"/wg0.pub
 modinfo "${module_path}"
 
 # load required modules
-modprobe udp_tunnel  
+modprobe udp_tunnel
 modprobe ip6_udp_tunnel
 
 # load wireguard module and grep dmesg to logs
@@ -139,13 +139,17 @@ TUNFILE=/dev/net/tun
 
 wg-quick up wg0
 
-ttydevice="/dev/tty1"
-clear > "${ttydevice}"
+# quit the plymouth (balena logo) service so that we can see the TTY
+dbus-send \
+    --system \
+    --dest=org.freedesktop.systemd1 \
+    --type=method_call \
+    --print-reply \
+    /org/freedesktop/systemd1 org.freedesktop.systemd1.Manager.StartUnit \
+    string:"plymouth-quit.service" string:"replace"
 
-# while read -r line
-# do
-#     [ -n "${line}" ] || { sleep 10 ; clear > "${ttydevice}" ; continue ; }
-#     echo "${line}"
-# done <<< "$(wg show | sed 's/[ \t]*$//' | sed 's/^[ \t]*//')"
+# prevent dmesg from printing to console
+dmesg -n 1
 
-sleep infinity
+# print wireguard stats to console every 2s
+exec watch wg show wg0 > /dev/tty1

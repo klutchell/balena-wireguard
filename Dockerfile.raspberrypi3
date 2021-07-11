@@ -36,7 +36,7 @@ RUN make -C kernel_modules_headers modules_prepare -j"$(nproc)" && \
 
 FROM balenalib/raspberrypi3-alpine:3.13-run-20210602 AS run
 
-RUN install_packages bash libmnl iptables openresolv iproute2 inotify-tools kmod libqrencode gettext ipcalc
+RUN install_packages bash libmnl iptables openresolv iproute2 inotify-tools kmod libqrencode gettext ipcalc dbus
 
 WORKDIR /usr/src/app
 
