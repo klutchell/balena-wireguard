@@ -36,20 +36,20 @@ RUN make -C kernel_modules_headers modules_prepare -j"$(nproc)" && \
 
 FROM balenalib/raspberrypi3-alpine:3.13-run-20210602 AS run
 
-RUN install_packages bash libmnl iptables openresolv iproute2 inotify-tools kmod libqrencode gettext ipcalc
+RUN install_packages bash libmnl iptables openresolv iproute2 inotify-tools kmod libqrencode gettext ipcalc dbus
 
 WORKDIR /usr/src/app
 
 COPY --from=build /usr/bin/wireguard-go /usr/bin/wg* /usr/bin/
 COPY --from=build /usr/src/app/wireguard-linux-compat-*/src/wireguard.ko .
 
-COPY init.sh server.conf peer.conf ./
+COPY run.sh server.conf peer.conf ./
 
 COPY show-peer /usr/bin/
 
-RUN chmod +x init.sh /usr/bin/show-peer
+RUN chmod +x run.sh /usr/bin/show-peer
 
-CMD [ "/usr/src/app/init.sh" ]
+CMD [ "/usr/src/app/run.sh" ]
 
 # set defaults for wireguard server
 ENV SERVER_HOST "auto"
