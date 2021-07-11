@@ -139,4 +139,13 @@ TUNFILE=/dev/net/tun
 
 wg-quick up wg0
 
+ttydevice="/dev/tty1"
+clear > "${ttydevice}"
+
+# while read -r line
+# do
+#     [ -n "${line}" ] || { sleep 10 ; clear > "${ttydevice}" ; continue ; }
+#     echo "${line}"
+# done <<< "$(wg show | sed 's/[ \t]*$//' | sed 's/^[ \t]*//')"
+
 sleep infinity
