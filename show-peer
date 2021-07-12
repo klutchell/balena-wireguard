@@ -14,9 +14,10 @@ do
 
     if grep -q "# ${peer}" "${config_root}"/wg0.conf
     then
-        echo "PEER ${peer} config:"
+        echo "PEER ${peer}:"
+        echo
         cat "${config_root}"/"${PEER_ID}".conf
-        echo "PEER ${peer} QR code:"
+        echo
         qrencode -t ansiutf8 < "${config_root}"/"${PEER_ID}".conf
     else
         echo "PEER ${peer} is not active"
