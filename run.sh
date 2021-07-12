@@ -5,28 +5,30 @@ set -euo pipefail
 # set a hostname for mDNS (default to wireguard.local)
 if [ -n "${DEVICE_HOSTNAME}" ]
 then
-    curl -v -w "\n" -X PATCH --header "Content-Type:application/json" \
+    echo "Setting device hostname to ${DEVICE_HOSTNAME}..."
+    curl -w "\n" -X PATCH --header "Content-Type:application/json" \
         --data "{\"network\": {\"hostname\": \"${DEVICE_HOSTNAME}\"}}" \
         "${BALENA_SUPERVISOR_ADDRESS}/v1/device/host-config?apikey=${BALENA_SUPERVISOR_API_KEY}" || true
 fi
 
 config_root=/etc/wireguard
 module_path=/usr/src/app/wireguard.ko
-server_template=/usr/src/app/server.conf
-peer_template=/usr/src/app/peer.conf
+server_template=/usr/src/app/templates/server.conf
+peer_template=/usr/src/app/templates/peer.conf
 
 server_conf_path="${config_root}"/wg0.conf
 server_key_path="${config_root}"/wg0.key
 server_pub_path="${config_root}"/wg0.pub
 
-# dump module info to logs
-modinfo "${module_path}"
-
 # load required modules
+echo "Loading udp_tunnel module..."
 modprobe udp_tunnel
+echo "Loading ip6_udp_tunnel module..."
 modprobe ip6_udp_tunnel
 
 # load wireguard module and grep dmesg to logs
+echo "Loading wireguard module..."
+modinfo "${module_path}"
 insmod "${module_path}" || true
 dmesg | grep wireguard
 
@@ -53,13 +55,21 @@ prips() {
 # lookup public ip if server host is not provided
 if [ -z "${SERVER_HOST}" ] || [ "${SERVER_HOST}" = "auto" ]
 then
+    echo "Looking up server public address... "
     SERVER_HOST="$(curl -s icanhazip.com)"
+else
+    echo "Using provided server address..."
 fi
+
+echo "${SERVER_HOST}"
+
+# restrict default file creation permissions
+umask 077
 
 # generate server keys if required
 if [ ! -f "${server_key_path}" ]
 then
-    umask 077
+    echo "Generating new keys for server..."
     wg genkey | tee "${server_key_path}" | wg pubkey > "${server_pub_path}"
 fi
 
@@ -89,7 +99,7 @@ do
     # genrate peer keys if required
     if [ ! -f "${peer_key_path}" ]
     then
-        umask 077
+        echo "Generating new keys for peer ${peer}..."
         wg genkey | tee "${peer_key_path}" | wg pubkey > "${peer_pub_path}"
     fi
 
@@ -100,7 +110,7 @@ do
     if [ -f "${peer_conf_path}" ]
     then
         # reuse the IP address is config already exists for this peer
-        PEER_ADDRESS=$(grep "Address" "${peer_conf_path}" | awk '{print $NF}')
+        PEER_ADDRESS="$(grep "Address" "${peer_conf_path}" | awk '{print $NF}')"
     fi
 
     # assign a new IP if peer address does not match the internal subnet
@@ -112,7 +122,12 @@ do
             PEER_ADDRESS="${addr}"
             grep -q -R "${PEER_ADDRESS}" "${config_root}"/*.conf || break
         done
+        echo "Assigning unused address for peer ${peer}..."
+    else
+        echo "Reusing existing address for peer ${peer}..."
     fi
+
+    echo "${PEER_ADDRESS}"
 
     # substitute env vars in peer template conf
     export PEER_ADDRESS PEER_PRIVKEY PEER_DNS SERVER_PUBKEY SERVER_HOST SERVER_PORT ALLOWEDIPS
@@ -127,19 +142,29 @@ PublicKey = ${PEER_PUBKEY}
 AllowedIPs = ${PEER_ADDRESS}/32
 EOF
 
-    # show-peer "${peer}"
 done
 
-trap "wg-quick down wg0" TERM INT QUIT EXIT
+teardown() {
+    rc=$?
+    echo "Caught signal $rc, bringing interface wg0 down..."
+    wg-quick down wg0
+    exit $rc
+}
+
+trap "teardown" TERM INT QUIT EXIT
 
 mkdir -p /dev/net
 TUNFILE=/dev/net/tun
-
 [ ! -c ${TUNFILE} ] && mknod ${TUNFILE} c 10 200
 
+# set file permissions
+chmod 600 "${config_root}"/*
+
+echo "Bringing interface wg0 up..."
 wg-quick up wg0
 
 # quit the plymouth (balena logo) service so that we can see the TTY
+echo "Stopping plymouth service..."
 dbus-send \
     --system \
     --dest=org.freedesktop.systemd1 \
@@ -151,5 +176,10 @@ dbus-send \
 # prevent dmesg from printing to console
 dmesg -n 1
 
-# print wireguard stats to console every 2s
-exec watch wg show wg0 > /dev/tty1
+# set preferred console font
+echo "Setting preferred console font ${TERMINUS_FONT}..."
+setfont -C /dev/tty1 "/usr/share/consolefonts/${TERMINUS_FONT}.psf.gz"
+
+# print wireguard info to console every 5s
+echo "Printing wireguard info to console..."
+exec watch -n 5 -t wg show wg0 > /dev/tty1

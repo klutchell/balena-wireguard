@@ -36,14 +36,20 @@ RUN make -C kernel_modules_headers modules_prepare -j"$(nproc)" && \
 
 FROM balenalib/raspberrypi3-alpine:3.13-run-20210602 AS run
 
-RUN install_packages bash libmnl iptables openresolv iproute2 inotify-tools kmod libqrencode gettext ipcalc dbus
+RUN install_packages \
+    bash libmnl iptables openresolv iproute2 inotify-tools \
+    kmod libqrencode gettext ipcalc dbus terminus-font
+
+WORKDIR /usr/src/app/templates
+
+COPY server.conf peer.conf ./
 
 WORKDIR /usr/src/app
 
 COPY --from=build /usr/bin/wireguard-go /usr/bin/wg* /usr/bin/
 COPY --from=build /usr/src/app/wireguard-linux-compat-*/src/wireguard.ko .
 
-COPY run.sh server.conf peer.conf ./
+COPY run.sh ./
 
 COPY show-peer /usr/bin/
 
@@ -64,3 +70,6 @@ ENV DEVICE_HOSTNAME "wireguard"
 
 # set log level for userspace module
 ENV LOG_LEVEL "verbose"
+
+# terminus font variant
+ENV TERMINUS_FONT "ter-120b"
