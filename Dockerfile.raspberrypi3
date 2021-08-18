@@ -30,8 +30,14 @@ ARG WITH_WGQUICK=yes
 RUN make -C wireguard-tools-${WG_TOOLS_TAG}/src -j"$(nproc)" && \
     make -C wireguard-tools-${WG_TOOLS_TAG}/src install
 
+# strip the kernel version check
+# https://forums.balena.io/t/using-wireguard-with-new-os-releases/344047/8
+# https://gist.github.com/mattmacleod/c6589fadeaaf83f2c7d75321d9172bbe
+COPY wireguard-linux-compat.patch .
+
 # build wireguard kernel module
-RUN make -C kernel_modules_headers modules_prepare -j"$(nproc)" && \
+RUN patch -d /usr/src/app/wireguard-linux-compat-${WG_LINUX_TAG}/ -p0 < wireguard-linux-compat.patch && \
+    make -C kernel_modules_headers modules_prepare -j"$(nproc)" && \
     make -C kernel_modules_headers M=/usr/src/app/wireguard-linux-compat-${WG_LINUX_TAG}/src -j"$(nproc)"
 
 FROM balenalib/raspberrypi3-alpine:3.13-run-20210602 AS run
