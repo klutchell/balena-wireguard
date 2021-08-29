@@ -2,14 +2,12 @@
 
 set -euo pipefail
 
-# set a hostname for mDNS (default to wireguard.local)
-if [ -n "${DEVICE_HOSTNAME}" ]
-then
-    echo "Setting device hostname to ${DEVICE_HOSTNAME}..."
-    curl -w "\n" -X PATCH --header "Content-Type:application/json" \
-        --data "{\"network\": {\"hostname\": \"${DEVICE_HOSTNAME}\"}}" \
-        "${BALENA_SUPERVISOR_ADDRESS}/v1/device/host-config?apikey=${BALENA_SUPERVISOR_API_KEY}" || true
-fi
+cleanup() {
+    test $? -eq 0 || wg-quick down wg0
+    tail -f /dev/null
+}
+
+trap "cleanup" TERM INT QUIT EXIT
 
 config_root=/etc/wireguard
 module_path=/usr/src/app/wireguard.ko
@@ -144,15 +142,6 @@ EOF
 
 done
 
-teardown() {
-    rc=$?
-    echo "Caught signal $rc, bringing interface wg0 down..."
-    wg-quick down wg0
-    exit $rc
-}
-
-trap "teardown" TERM INT QUIT EXIT
-
 mkdir -p /dev/net
 TUNFILE=/dev/net/tun
 [ ! -c ${TUNFILE} ] && mknod ${TUNFILE} c 10 200
@@ -162,24 +151,3 @@ chmod 600 "${config_root}"/*
 
 echo "Bringing interface wg0 up..."
 wg-quick up wg0
-
-# quit the plymouth (balena logo) service so that we can see the TTY
-echo "Stopping plymouth service..."
-dbus-send \
-    --system \
-    --dest=org.freedesktop.systemd1 \
-    --type=method_call \
-    --print-reply \
-    /org/freedesktop/systemd1 org.freedesktop.systemd1.Manager.StartUnit \
-    string:"plymouth-quit.service" string:"replace"
-
-# prevent dmesg from printing to console
-dmesg -n 1
-
-# set preferred console font
-echo "Setting preferred console font ${TERMINUS_FONT}..."
-setfont -C /dev/tty1 "/usr/share/consolefonts/${TERMINUS_FONT}.psf.gz"
-
-# print wireguard info to console every 5s
-echo "Printing wireguard info to console..."
-exec watch -n 5 -t wg show wg0 > /dev/tty1
