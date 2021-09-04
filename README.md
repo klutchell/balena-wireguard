@@ -36,7 +36,7 @@ Once your device joins the fleet you'll need to allow some time for it to downlo
 
 When it's done you can display QR codes for each peer by running `show-peer <peer>` in the container shell.
 
-Additional usage instructions for wireguard can be found here: <https://www.wireguard.com/quickstart/>
+Additional usage instructions for wireguard can be found here: <https://www.wireguard.com/>
 
 ## Contributing
 

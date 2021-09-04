@@ -1,0 +1,59 @@
+name: deploy
+
+on:
+  pull_request:
+    types: [opened, synchronize, closed]
+    branches:
+      - master
+      - main
+
+jobs:
+
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+
+      - uses: actions/checkout@v2
+
+      - name: Checkout balena-io/balena-ci
+        uses: actions/checkout@v2
+        with:
+          repository: balena-io/balena-ci
+          ref: refs/heads/master
+          token: ${{ secrets.BALENA_CI_TOKEN }}
+          persist-credentials: false
+          path: ./.github/actions/balena-ci
+
+      - uses: ./.github/actions/balena-ci
+        id: balena_ci
+        with:
+          balena_token: ${{ secrets.BALENA_TOKEN }}
+          fleet: ${{ secrets.BALENA_FLEET }}
+          target: 'main'
+          versionbot: false
+          environment: 'balena-cloud.com'
+      
+      - name: Log release ID
+        run: echo "Pushed release ID ${{ steps.balena_ci.outputs.release_id }}"
+
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install jq -y
+
+      - name: Get release version from balena API
+        id: balena_api
+        run: |
+          response="$(curl -X GET \
+            "https://api.balena-cloud.com/v6/release(${{ steps.balena_ci.outputs.release_id }})?\$select=version" \
+            -H "Content-Type: application/json" -H "Authorization: Bearer ${{ secrets.BALENA_TOKEN }}" | jq '.d[].version.raw')" && \
+            echo "::set-output name=release_version::${response}
+
+      # - name: Create a GitHub release
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     tag: ${{ steps.tag_version.outputs.new_tag }}
+      #     name: Release ${{ steps.tag_version.outputs.new_tag }}
+      #     body: ${{ steps.tag_version.outputs.changelog }}
+      #     token: ${{ secrets.GITHUB_TOKEN }}
+      #     draft: true

@@ -1,0 +1,8 @@
+mode: Mainline
+branches: {}
+ignore:
+  sha: []
+merge-message-formats: {}
+major-version-bump-message: '\^Change-type:\s?(breaking|major)'
+minor-version-bump-message: '\^Change-type:\s?(feature|minor)'
+patch-version-bump-message: '\^Change-type:\s?(fix|patch)'
