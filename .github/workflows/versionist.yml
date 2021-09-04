@@ -1,0 +1,40 @@
+name: versionist
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths-ignore:
+      - 'CHANGELOG.md'
+      - 'VERSION'
+      - 'balena.yml'
+
+jobs:
+
+  versionist:
+    if: "!contains(github.event.head_commit.author.name, 'versionist')"
+    runs-on: ubuntu-20.04
+
+    outputs:
+      version: ${{ steps.versionist.outputs.version }}
+      updated: ${{ steps.versionist.outputs.updated }}
+
+    steps:
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - id: versionist
+        uses: tmigone/versionist@v0.4.2
+        with:
+          github_email: 'versionist@github.com'
+          github_username: 'versionist'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update balena.yml version
+        uses: mikefarah/yq@master
+        with:
+          cmd: yq eval -i -v '.version = "${{ steps.versionist.outputs.version }}"' 'balena.yml'
