@@ -1,0 +1,26 @@
+name: "WireGuard"
+type: "sw.application"
+version: 0.0.1
+description: "WireGuard is an extremely simple yet fast and modern VPN that utilizes state-of-the-art cryptography."
+post-provisioning: >-
+  ## Usage instructions
+  
+  Once your device joins the fleet you'll need to allow some time for it to download the various services.
+  
+  When it's done you can display QR codes for each peer by running `show-peer <peer>` in the container shell.
+
+  Additional usage instructions for wireguard can be found here: https://www.wireguard.com/
+
+assets:
+  repository:
+    type: "blob.asset"
+    data:
+      url: "https://github.com/klutchell/balena-wireguard"
+  logo:
+    type: "blob.asset"
+    data:
+      url: "https://raw.githubusercontent.com/klutchell/balena-wireguard/main/logo.png"
+data:
+  defaultDeviceType: "raspberrypi3"
+  supportedDeviceTypes:
+    - "raspberrypi3"
