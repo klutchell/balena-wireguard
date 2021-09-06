@@ -28,7 +28,7 @@ jobs:
           persist-credentials: false
 
       - id: versionist
-        uses: tmigone/versionist@v0.4.2
+        uses: tmigone/versionist@v0.4.6
         with:
           github_email: 'versionist@github.com'
           github_username: 'versionist'
