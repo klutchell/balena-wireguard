@@ -33,6 +33,7 @@ jobs:
           github_email: 'versionist@github.com'
           github_username: 'versionist'
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
 
       - name: Update balena.yml version
         uses: mikefarah/yq@master
