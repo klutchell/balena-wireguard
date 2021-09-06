@@ -5,10 +5,6 @@ on:
     branches:
       - master
       - main
-    paths-ignore:
-      - 'CHANGELOG.md'
-      - 'VERSION'
-      - 'balena.yml'
 
 jobs:
 
@@ -34,8 +30,3 @@ jobs:
           github_username: 'versionist'
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
-
-      - name: Update balena.yml version
-        uses: mikefarah/yq@master
-        with:
-          cmd: yq eval -i -v '.version = "${{ steps.versionist.outputs.version }}"' 'balena.yml'
