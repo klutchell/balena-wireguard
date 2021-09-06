@@ -40,7 +40,7 @@ RUN patch -d /usr/src/app/wireguard-linux-compat-${WG_LINUX_TAG}/ -p0 < wireguar
     make -C build modules_prepare -j"$(nproc)" && \
     make -C build M=/usr/src/app/wireguard-linux-compat-${WG_LINUX_TAG}/src -j"$(nproc)"
 
-FROM balenalib/raspberrypi3-alpine:3.13-run-20210602 AS run
+FROM balenalib/raspberrypi3-alpine:3.13-run-20210825 AS run
 
 RUN install_packages \
     bash libmnl iptables openresolv iproute2 inotify-tools \
