@@ -3,18 +3,13 @@ name: versionist
 on:
   push:
     branches:
-      - master
-      - main
+      - "main"
 
 jobs:
 
   versionist:
     if: "!contains(github.event.head_commit.author.name, 'versionist')"
     runs-on: ubuntu-20.04
-
-    outputs:
-      version: ${{ steps.versionist.outputs.version }}
-      updated: ${{ steps.versionist.outputs.updated }}
 
     steps:
 
@@ -26,7 +21,9 @@ jobs:
       - id: versionist
         uses: tmigone/versionist@v0.4.6
         with:
-          github_email: 'versionist@github.com'
+          github_email: 'versionist@users.noreply.github.com'
           github_username: 'versionist'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # VERSIONIST_TOKEN requires 'repo' access.
+          # Don't use GITHUB_TOKEN if you want this commit to trigger other workflows.
+          github_token: ${{ secrets.VERSIONIST_TOKEN }}
           branch: main

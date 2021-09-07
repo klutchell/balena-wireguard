@@ -1,0 +1,68 @@
+name: balena
+
+on:
+  push:
+    tags:
+      - "v*"
+  pull_request:
+    branches:
+      - "main"
+
+env:
+  BALENARC_BALENA_URL: balena-cloud.com
+  BALENARC_PROXY_URL: balena-devices.com
+  BALENA_CLI_VERSION: 12.48.7
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - uses: actions/setup-node@v2
+      with:
+        node-version: 12
+
+    - name: Install balena CLI
+      run: npm install balena-cli@${{ env.BALENA_CLI_VERSION }} --production --global
+
+    - name: Login to balenaCloud
+      run: balena login --token "${BALENA_API_KEY}"
+
+    - name: Push to balenaCloud
+      if: github.event_name != 'pull_request'
+      run: |
+        balena push ${{ secrets.BALENA_FLEET_SLUG }} \
+          --release-tag GITHUB_WORKFLOW "${GITHUB_WORKFLOW}" \
+          --release-tag GITHUB_RUN_ID "${GITHUB_RUN_ID}" \
+          --release-tag GITHUB_RUN_NUMBER "${GITHUB_RUN_NUMBER}" \
+          --release-tag GITHUB_ACTOR "${GITHUB_ACTOR}" \
+          --release-tag GITHUB_SHA "${GITHUB_SHA}" \
+          --release-tag GITHUB_REF "${GITHUB_REF}"
+
+    - name: Push to balenaCloud as draft
+      if: github.event_name == 'pull_request'
+      run: |
+        balena push ${{ secrets.BALENA_FLEET_SLUG }} \
+          --release-tag GITHUB_WORKFLOW "${GITHUB_WORKFLOW}" \
+          --release-tag GITHUB_RUN_ID "${GITHUB_RUN_ID}" \
+          --release-tag GITHUB_RUN_NUMBER "${GITHUB_RUN_NUMBER}" \
+          --release-tag GITHUB_ACTOR "${GITHUB_ACTOR}" \
+          --release-tag GITHUB_SHA "${GITHUB_SHA}" \
+          --release-tag GITHUB_REF "${GITHUB_REF}" \
+          --draft
+
+    # - name: Build image(s)
+    #   run: balena build --fleet "${{ secrets.BALENA_FLEET_SLUG }}" -e
+
+    # - name: Deploy to balenaCloud
+    #   if: github.event_name != 'pull_request'
+    #   run: |
+    #     balena deploy "${{ secrets.BALENA_FLEET_SLUG }}" \
+    #       --release-tag GITHUB_WORKFLOW "${GITHUB_WORKFLOW}" \
+    #       --release-tag GITHUB_RUN_ID "${GITHUB_RUN_ID}" \
+    #       --release-tag GITHUB_RUN_NUMBER "${GITHUB_RUN_NUMBER}" \
+    #       --release-tag GITHUB_ACTOR "${GITHUB_ACTOR}" \
+    #       --release-tag GITHUB_SHA "${GITHUB_SHA}" \
+    #       --release-tag GITHUB_REF "${GITHUB_REF}"
