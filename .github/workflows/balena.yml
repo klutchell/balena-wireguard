@@ -35,7 +35,6 @@ jobs:
       run: echo "DRAFT=--draft" >> $GITHUB_ENV
 
     - name: Push to balenaCloud
-      if: github.event_name != 'pull_request'
       run: |
         balena push ${{ secrets.BALENA_FLEET_SLUG }} \
           --release-tag GITHUB_WORKFLOW "${GITHUB_WORKFLOW}" \
@@ -48,12 +47,14 @@ jobs:
 
     - name: Parse release ID from build log
       run: |
+        set -o pipefail
         cat build.log | \
           sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g" | \
           sed -rn 's/.*Release: ([[:alnum:]]+) \(id: ([0-9]+)\)/RELEASE_ID=\2/p' >> $GITHUB_ENV
 
     - name: Get release version from balena API
       run: |
+        set -o pipefail
         curl -fsSL -X GET \
           "https://api.${{ env.BALENARC_BALENA_URL }}/v6/release(${{ env.RELEASE_ID }})?\$select=version" \
           -H "Content-Type: application/json" -H "Authorization: Bearer ${{ secrets.BALENA_API_KEY }}" | \
@@ -63,4 +64,4 @@ jobs:
       if: github.event_name == 'pull_request'
       with:
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
-        tag: "${{ env.RELEASE_VERSION }}"
+        tag: "v${{ env.RELEASE_VERSION }}"
