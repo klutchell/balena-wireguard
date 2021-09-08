@@ -28,7 +28,11 @@ jobs:
       run: npm install balena-cli@${{ env.BALENA_CLI_VERSION }} --production --global
 
     - name: Login to balenaCloud
-      run: balena login --token "${BALENA_API_KEY}"
+      run: balena login --token "${{ secrets.BALENA_API_KEY }}"
+
+    - name: Enable draft option
+      if: github.event_name == 'pull_request'
+      run: echo "DRAFT=--draft" >> $GITHUB_ENV
 
     - name: Push to balenaCloud
       if: github.event_name != 'pull_request'
@@ -39,30 +43,23 @@ jobs:
           --release-tag GITHUB_RUN_NUMBER "${GITHUB_RUN_NUMBER}" \
           --release-tag GITHUB_ACTOR "${GITHUB_ACTOR}" \
           --release-tag GITHUB_SHA "${GITHUB_SHA}" \
-          --release-tag GITHUB_REF "${GITHUB_REF}"
-
-    - name: Push to balenaCloud as draft
-      if: github.event_name == 'pull_request'
-      run: |
-        balena push ${{ secrets.BALENA_FLEET_SLUG }} \
-          --release-tag GITHUB_WORKFLOW "${GITHUB_WORKFLOW}" \
-          --release-tag GITHUB_RUN_ID "${GITHUB_RUN_ID}" \
-          --release-tag GITHUB_RUN_NUMBER "${GITHUB_RUN_NUMBER}" \
-          --release-tag GITHUB_ACTOR "${GITHUB_ACTOR}" \
-          --release-tag GITHUB_SHA "${GITHUB_SHA}" \
           --release-tag GITHUB_REF "${GITHUB_REF}" \
-          --draft
+          ${DRAFT} | tee build.log
 
-    # - name: Build image(s)
-    #   run: balena build --fleet "${{ secrets.BALENA_FLEET_SLUG }}" -e
+    - name: Parse release ID from build log
+      run: |
+        cat build.log | \
+          sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g" | \
+          sed -rn 's/.*Release: ([[:alnum:]]+) \(id: ([0-9]+)\)/RELEASE_ID=\2/p' >> $GITHUB_ENV
 
-    # - name: Deploy to balenaCloud
-    #   if: github.event_name != 'pull_request'
-    #   run: |
-    #     balena deploy "${{ secrets.BALENA_FLEET_SLUG }}" \
-    #       --release-tag GITHUB_WORKFLOW "${GITHUB_WORKFLOW}" \
-    #       --release-tag GITHUB_RUN_ID "${GITHUB_RUN_ID}" \
-    #       --release-tag GITHUB_RUN_NUMBER "${GITHUB_RUN_NUMBER}" \
-    #       --release-tag GITHUB_ACTOR "${GITHUB_ACTOR}" \
-    #       --release-tag GITHUB_SHA "${GITHUB_SHA}" \
-    #       --release-tag GITHUB_REF "${GITHUB_REF}"
+    - name: Get release version from balena API
+      run: |
+        curl -fsSL -X GET \
+          "https://api.${{ env.BALENARC_BALENA_URL }}/v6/release(${{ env.RELEASE_ID }})?\$select=version" \
+          -H "Content-Type: application/json" -H "Authorization: Bearer ${{ secrets.BALENA_API_KEY }}" | \
+           jq -r '.d[].version.raw' | sed 's/^/RELEASE_VERSION=/' >> $GITHUB_ENV
+
+    - uses: tvdias/github-tagger@v0.0.2
+      with:
+        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        tag: "${{ env.RELEASE_VERSION }}"

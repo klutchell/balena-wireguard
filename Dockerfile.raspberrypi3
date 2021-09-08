@@ -15,10 +15,10 @@ ARG BALENA_MACHINE_NAME=raspberrypi3
 
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
-RUN curl -L https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-${WG_GO_TAG}.tar.xz | tar xJ && \
-    curl -L https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${WG_TOOLS_TAG}.tar.xz | tar xJ && \
-    curl -L https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-${WG_LINUX_TAG}.tar.xz | tar xJ && \
-    curl -L https://files.balena-cloud.com/images/${BALENA_MACHINE_NAME}/${BALENA_OS_VERSION}/kernel_source.tar.gz | tar xz --strip-components=2
+RUN curl -fsSL https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-${WG_GO_TAG}.tar.xz | tar xJ && \
+    curl -fsSL https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${WG_TOOLS_TAG}.tar.xz | tar xJ && \
+    curl -fsSL https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-${WG_LINUX_TAG}.tar.xz | tar xJ && \
+    curl -fsSL https://files.balena-cloud.com/images/${BALENA_MACHINE_NAME}/${BALENA_OS_VERSION}/kernel_source.tar.gz | tar xz --strip-components=2
 
 # build and install wireguard-go
 RUN make -C wireguard-go-${WG_GO_TAG} -j"$(nproc)" && \
