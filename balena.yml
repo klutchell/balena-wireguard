@@ -1,6 +1,6 @@
 name: WireGuard
 type: sw.application
-version: 0.2.3
+version: 0.2.4
 description: >-
   WireGuard is an extremely simple yet fast and modern VPN that utilizes
   state-of-the-art cryptography.
