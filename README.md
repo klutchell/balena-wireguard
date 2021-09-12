@@ -42,6 +42,20 @@ Additional usage instructions for wireguard can be found here: <https://www.wire
 
 Please open an issue or submit a pull request with any features, fixes, or changes.
 
+## Versioning
+
+Note that the current CI workflow will bump the version in
+the main branch _after_the merged balenaCloud release has
+been deployed as final.
+
+As such, breaking changes may be introduced in `x.y.z-rev`
+releases in the balenaCloud dashboard with no indication
+that the major version was bumped as part of the same merge.
+
+However each balenaCloud release version (draft or final)
+will be tagged on the associated git commit so that should
+be used as the source of truth.
+
 ## Acknowledgements
 
 - <https://www.balena.io/blog/how-to-run-wireguard-vpn-in-balenaos/>
