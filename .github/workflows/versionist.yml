@@ -6,24 +6,21 @@ on:
       - "main"
 
 jobs:
-
   versionist:
-    if: "!contains(github.event.head_commit.author.name, 'versionist')"
     runs-on: ubuntu-20.04
 
     steps:
-
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
           persist-credentials: false
 
+      # requires with 'repo' access.
+      # using GITHUB_TOKEN will NOT trigger other workflows
       - id: versionist
         uses: tmigone/versionist@v0.4.6
         with:
-          github_email: 'versionist@users.noreply.github.com'
-          github_username: 'versionist'
-          # VERSIONIST_TOKEN requires 'repo' access.
-          # Don't use GITHUB_TOKEN if you want this commit to trigger other workflows.
-          github_token: ${{ secrets.VERSIONIST_TOKEN }}
+          github_email: "versionist@users.noreply.github.com"
+          github_username: "versionist"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: main
