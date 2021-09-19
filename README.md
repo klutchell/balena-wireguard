@@ -2,16 +2,18 @@
 
 [WireGuard®](https://www.wireguard.com/) is an extremely simple yet fast and modern VPN that utilizes state-of-the-art cryptography.
 
-## Hardware Required
+## Supported Devices
 
-- Raspberry Pi 3/3b/3b+
-- balenaOS v2.80.3+rev1 (note that 64-bit OS is not supported)
+The following device and OS combinations have been somewhat tested.
+Please consider updating this section and `balena.yml` if you have tried a new combination.
+
+- Raspberry Pi 3 @ balenaOS 2.80.3+rev1
 
 ## Getting Started
 
 You can one-click-deploy this project to balena using the button below:
 
-[![Deploy with balena](https://balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/klutchell/balena-wireguard&defaultDeviceType=raspberrypi3)
+[![Deploy with balena](https://balena.io/deploy.svg)](https://dashboard.balena-cloud.com/deploy?repoUrl=https://github.com/klutchell/balena-wireguard)
 
 ## Manual Deployment
 
@@ -26,7 +28,7 @@ flashing a device, downloading the project and pushing it via the [balena CLI](h
 | `SERVER_PORT`  | External port for docker host. Defaults to `51820`.                                                                                                                                                                                                                                                                                        |
 | `PEERS`        | Number of peers to create confs for. Can be a number like `4` or a list of names such as `myPC,myPhone,myTablet`.                                                                                                                                                                                                                          |
 | `PEER_DNS`     | DNS server set in peer/client configs. Defaults to `1.1.1.1`.                                                                                                                                                                                                                                                                              |
-| `NETWORK`      | Internal network CIDR for the wireguard and server and peers. Defaults to `10.13.13.0/24`.                                                                                                                                                                                                                                                 |
+| `CIDR`         | Internal network CIDR for the wireguard and server and peers. Defaults to `10.13.13.0/24`.                                                                                                                                                                                                                                                 |
 | `ALLOWEDIPS`   | The IPs/Ranges that the peers will be able to reach using the VPN connection. If not specified the default value is `0.0.0.0/0, ::0/0`. This will cause ALL traffic to route through the VPN, if you want split tunneling, set this to only the IPs you would like to use the tunnel AND the ip of the server's WG ip, such as 10.13.13.1. |
 | `SET_HOSTNAME` | Set a custom hostname on application start. Defaults to `wireguard`.                                                                                                                                                                                                                                                                       |
 
@@ -38,6 +40,35 @@ When it's done you can display QR codes for each peer by running `show-peer <pee
 
 Additional usage instructions for wireguard can be found here: <https://www.wireguard.com/>
 
+### Kernel Module
+
+The default behaviour for maximum device compatibility is to compile the Wireguard kernel module on first app start.
+This allows checking the version of the running Host OS before downloading kernel sources.
+
+You can optionally build the kernel module ahead of time, during the application build stage, by setting the following
+ARGS in `Dockerfile.template`.
+
+```dockerfile
+ARG BALENA_DEVICE_TYPE=%%BALENA_MACHINE_NAME%%
+ARG BALENA_HOST_OS_VERSION=2.80.3+rev1
+```
+
+This makes for much faster app startup but must match the environment
+of the target device.
+
+Deploying a release with a pre-built module to an incompatible device type or version
+may fail to load and instead fallback to the [wireguard-go](https://git.zx2c4.com/wireguard-go/about/) userspace module.
+
+If either of those ARGS are not set, the module build will be postponed
+until runtime when the device type and Host OS version can be checked by the script.
+
+### Userspace Module
+
+If the kernel module fails to build, or load, for any reason including those mentioned
+above, the application will automatically use the [wireguard-go](https://git.zx2c4.com/wireguard-go/about/) userspace module
+instead. This operates the same and should work on all platforms but will incur some
+performance penalties.
+
 ## Contributing
 
 Please open an issue or submit a pull request with any features, fixes, or changes.
@@ -45,7 +76,7 @@ Please open an issue or submit a pull request with any features, fixes, or chang
 ## Versioning
 
 Note that the current CI workflow will bump the version in
-the main branch _after_the merged balenaCloud release has
+the main branch _after_ the merged balenaCloud release has
 been deployed as final.
 
 As such, breaking changes may be introduced in `x.y.z-rev`
