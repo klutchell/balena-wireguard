@@ -7,9 +7,6 @@ services:
   wireguard:
     build: .
     privileged: true
-    # cap_add:
-    #   - NET_ADMIN
-    #   - SYS_MODULE
     volumes:
       - config:/etc/wireguard
     ports:
