@@ -39,8 +39,5 @@ make -C /usr/src/app/build M="${src}" -j"$(nproc)"
 
 mv "${src}/wireguard.ko" "/usr/src/app/"
 
-# dump module info to logs
-modinfo /usr/src/app/wireguard.ko
-
 # clean up kernel sources
 rm -rf /usr/src/app/build
