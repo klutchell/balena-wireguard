@@ -65,4 +65,4 @@ jobs:
         if: ${{ steps.release_api.outputs.release_version }} != ""
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          tag: "v${{ steps.release_api.outputs.release_version }}"
+          tag: "${{ steps.release_api.outputs.release_version }}"
