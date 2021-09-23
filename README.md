@@ -13,9 +13,9 @@ Please consider updating this table and `balena.yml` if you have tried a new com
 | Raspberry Pi 3                  | 2.83.21+rev1 |
 | Raspberry Pi 4 (using 64bit OS) | 2.83.10+rev1 |
 
-Note that the Fleet Architecture must match the [Device Architecture](https://www.balena.io/docs/reference/base-images/devicetypes/) for kernel module support!
-For example, `armv7hf` images normally work on `aarch64` fleets but the kernel module will
-be compiled for the wrong platform so only the userspace module will be available.
+Note that the Fleet Architecture must match the Device Architecture for kernel module support!
+So if using mixed device Fleets, check that the architecture is the same for all devices.
+<https://www.balena.io/docs/reference/base-images/devicetypes/>
 
 ## Getting Started
 
@@ -46,6 +46,10 @@ flashing a device, downloading the project and pushing it via the [balena CLI](h
 Once your device joins the fleet you'll need to allow some time for it to download the application and start the services.
 
 When it's done you can display QR codes for each peer by running `show-peer <peer>` in the container shell.
+
+For example, the following CLI command will show the QR code for `myPhone`:
+
+`echo "show-peer myPhone; exit;" | balena ssh <UUID> wireguard`
 
 Additional usage instructions for wireguard can be found here: <https://www.wireguard.com/>
 
