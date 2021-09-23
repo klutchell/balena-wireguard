@@ -26,12 +26,15 @@ do_insmod() {
 	if lsmod | grep wireguard 2>&1
 	then
 		cat /sys/module/wireguard/version
-		info "Wireguard module is loaded."
 		return 0
 	fi
 
+    if [ ! -f /usr/src/app/wireguard.ko ]
+    then
+        return 1
+    fi
+
 	modinfo "${module_path}"
-    info "Loading wireguard module..."
 
 	# load dependencies
 	modprobe udp_tunnel
@@ -40,11 +43,9 @@ do_insmod() {
 	if ! insmod "${module_path}"
 	then
 		dmesg | grep wireguard
-		warn "Failed to load wireguard module."
 		return 1
 	else
 		dmesg | grep wireguard
-		info "Succesfully loaded wireguard module!"
 		return 0
 	fi
 }
@@ -61,8 +62,8 @@ server_pub_path="${config_root}"/wg0.pub
 
 if ! do_insmod
 then
-	"${buildmod_cmd}"
-    do_insmod || warn "No kernel module support found."
+	"${buildmod_cmd}" || warn "Failed to build Wireguard kernel module!"
+    do_insmod || warn "Failed to load Wireguard kernel module!"
 fi
 
 mkdir -p "${config_root}"
