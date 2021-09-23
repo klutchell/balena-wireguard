@@ -23,9 +23,8 @@ fatal() {
 
 do_insmod() {
 
-	if lsmod | grep wireguard 2>&1
+	if lsmod | grep wireguard >/dev/null 2>&1
 	then
-		cat /sys/module/wireguard/version
 		return 0
 	fi
 
@@ -34,11 +33,10 @@ do_insmod() {
         return 1
     fi
 
-	modinfo "${module_path}"
-
-	# load dependencies
 	modprobe udp_tunnel
 	modprobe ip6_udp_tunnel
+
+    modinfo "${module_path}"
 
 	if ! insmod "${module_path}"
 	then
@@ -60,10 +58,27 @@ server_conf_path="${config_root}"/wg0.conf
 server_key_path="${config_root}"/wg0.key
 server_pub_path="${config_root}"/wg0.pub
 
+if [ -n "${DISABLE_USERSPACE:-}" ]
+then
+    info "Removing wireguard-go userspace module..."
+    rm /usr/bin/wireguard-go
+fi
+
 if ! do_insmod
 then
 	"${buildmod_cmd}" || warn "Failed to build Wireguard kernel module!"
-    do_insmod || warn "Failed to load Wireguard kernel module!"
+fi
+
+if ! do_insmod && [ -n "${DISABLE_USERSPACE:-}" ]
+then
+    fatal "Failed to load kernel module and userspace is disabled!"
+    info "Check your Device Type and OS Version or unset DISABLE_USERSPACE."
+fi
+
+if ! do_insmod && [ -z "${DISABLE_USERSPACE:-}" ]
+then
+    warn "Fallback wireguard-go userspace module will be used!"
+    info "This can be disabled by setting DISABLE_USERSPACE to any value."
 fi
 
 mkdir -p "${config_root}"
