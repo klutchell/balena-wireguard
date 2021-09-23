@@ -23,22 +23,20 @@ fatal() {
 
 do_insmod() {
 
-	if lsmod | grep wireguard 2>&1
+	if lsmod | grep wireguard >/dev/null 2>&1
 	then
-		cat /sys/module/wireguard/version
 		return 0
 	fi
 
-    if [ ! -f /usr/src/app/wireguard.ko ]
+    if [ ! -f "${module_path}" ]
     then
         return 1
     fi
 
-	modinfo "${module_path}"
-
-	# load dependencies
 	modprobe udp_tunnel
 	modprobe ip6_udp_tunnel
+
+    modinfo "${module_path}"
 
 	if ! insmod "${module_path}"
 	then
@@ -79,8 +77,13 @@ fi
 
 if ! do_insmod && [ -z "${DISABLE_USERSPACE:-}" ]
 then
-    warn "Fallback wireguard-go userspace module will be used!"
+    warn "Using universal wireguard-go userspace module, performance may be impacted!"
     info "This can be disabled by setting DISABLE_USERSPACE to any value."
+fi
+
+if do_insmod
+then
+    info "Using Wireguard kernel module for maximum performance!"
 fi
 
 mkdir -p "${config_root}"
