@@ -52,7 +52,6 @@ jobs:
           echo "::set-output name=release_id::$(sed -rn 's/.*Release: ([[:alnum:]]+) \(id: ([0-9]+)\)/\2/p' build.log)"
 
       - id: release_api
-        if: github.event_name == 'pull_request'
         shell: bash
         run: |
           echo "::set-output name=release_version::$(curl -fsSL -X GET \
@@ -62,7 +61,7 @@ jobs:
       # requires with 'repo' access.
       # using GITHUB_TOKEN will NOT trigger other workflows
       - uses: tvdias/github-tagger@v0.0.2
-        if: github.event_name == 'pull_request'
+        continue-on-error: true
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
           tag: "v${{ steps.release_api.outputs.release_version }}"
