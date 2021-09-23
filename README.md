@@ -10,6 +10,7 @@ Please consider updating this table and `balena.yml` if you have tried a new com
 | Device Type                     | OS Version   |
 | ------------------------------- | ------------ |
 | Raspberry Pi 3                  | 2.80.3+rev1  |
+| Raspberry Pi 3                  | 2.83.21+rev1 |
 | Raspberry Pi 4 (using 64bit OS) | 2.83.10+rev1 |
 
 Note that the Fleet Architecture must match the [Device Architecture](https://www.balena.io/docs/reference/base-images/devicetypes/) for kernel module support!
