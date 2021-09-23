@@ -52,7 +52,7 @@ jobs:
           echo "::set-output name=release_id::$(sed -rn 's/.*Release: ([[:alnum:]]+) \(id: ([0-9]+)\)/\2/p' build.log)"
 
       - id: release_api
-        if: ${{ steps.balena_push.outputs.release_id }} != ""
+        if: github.event_name == 'pull_request'
         shell: bash
         run: |
           echo "::set-output name=release_version::$(curl -fsSL -X GET \
@@ -62,7 +62,7 @@ jobs:
       # requires with 'repo' access.
       # using GITHUB_TOKEN will NOT trigger other workflows
       - uses: tvdias/github-tagger@v0.0.2
-        if: ${{ steps.release_api.outputs.release_version }} != ""
+        if: github.event_name == 'pull_request'
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          tag: "${{ steps.release_api.outputs.release_version }}"
+          tag: "v${{ steps.release_api.outputs.release_version }}"
