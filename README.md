@@ -7,7 +7,12 @@
 The following device and OS combinations have been somewhat tested.
 Please consider updating this section and `balena.yml` if you have tried a new combination.
 
-- Raspberry Pi 3 @ balenaOS 2.80.3+rev1
+- Raspberry Pi 3 @ balenaOS `2.80.3+rev1`
+- Raspberry Pi 4 (using 64bit OS) @ balenaOS `2.83.10+rev1`
+
+Note that the Fleet Architecture must match the [Device Architecture](https://www.balena.io/docs/reference/base-images/devicetypes/) for kernel module support!
+For example, `armv7hf` images normally work on `aarch64` fleets but the kernel module will
+be compiled for the wrong platform so only the userspace module will be available.
 
 ## Getting Started
 
