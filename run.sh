@@ -23,9 +23,8 @@ fatal() {
 
 do_insmod() {
 
-	if lsmod | grep wireguard 2>&1
+	if lsmod | grep wireguard >/dev/null 2>&1
 	then
-		cat /sys/module/wireguard/version
 		return 0
 	fi
 
@@ -34,11 +33,10 @@ do_insmod() {
         return 1
     fi
 
-	modinfo "${module_path}"
-
-	# load dependencies
 	modprobe udp_tunnel
 	modprobe ip6_udp_tunnel
+
+    modinfo "${module_path}"
 
 	if ! insmod "${module_path}"
 	then
