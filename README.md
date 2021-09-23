@@ -14,8 +14,8 @@ Please consider updating this table and `balena.yml` if you have tried a new com
 | Raspberry Pi 4 (using 64bit OS) | 2.83.10+rev1 |
 
 Note that the Fleet Architecture must match the Device Architecture for kernel module support!
+
 So if using mixed device Fleets, check that the architecture is the same for all devices.
-<https://www.balena.io/docs/reference/base-images/devicetypes/>
 
 ## Getting Started
 
