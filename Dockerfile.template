@@ -62,7 +62,7 @@ RUN patch -d /usr/src/app/wireguard-linux-compat-${WG_LINUX_TAG}/ -p0 < wireguar
 # Set both of these to match your target device to pre-build modules
 # Leave at least one of them unset to postpone module building to app start
 ARG BALENA_DEVICE_TYPE=%%BALENA_MACHINE_NAME%%
-# ARG BALENA_HOST_OS_VERSION=2.80.3+rev1
+ARG BALENA_HOST_OS_VERSION
 
 COPY buildmod.sh ./
 RUN chmod +x ./buildmod.sh && ./buildmod.sh

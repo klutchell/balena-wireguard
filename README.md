@@ -66,6 +66,20 @@ ARG BALENA_DEVICE_TYPE=%%BALENA_MACHINE_NAME%%
 ARG BALENA_HOST_OS_VERSION=2.80.3+rev1
 ```
 
+Alternatively, you can set the ARGS via `docker-compose.yml` file:
+
+```yaml
+services:
+  wireguard:
+    build: 
+        context: .
+        dockerfile: Dockerfile.template
+        args:
+            BALENA_DEVICE_TYPE: raspberrypi4-64
+            BALENA_HOST_OS_VERSION: 2.85.2+rev3
+    privileged: true
+```
+
 This makes for much faster app startup but must match the environment
 of the target device.
 
