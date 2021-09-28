@@ -61,7 +61,7 @@ server_pub_path="${config_root}"/wg0.pub
 if [ -n "${DISABLE_USERSPACE:-}" ]
 then
     info "Removing wireguard-go userspace module..."
-    rm /usr/bin/wireguard-go
+    rm -f /usr/bin/wireguard-go
 fi
 
 if ! do_insmod
