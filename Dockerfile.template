@@ -1,4 +1,4 @@
-FROM golang:1.17.1-alpine3.14 AS wireguard-go
+FROM golang:1.17.5-alpine3.14 AS wireguard-go
 
 # hadolint ignore=DL3018
 RUN apk add --no-cache curl build-base
