@@ -30,3 +30,4 @@ data:
   supportedDeviceTypes:
     - raspberrypi3
     - raspberrypi4-64
+    - genericx86-64-ext
