@@ -8,20 +8,19 @@ on:
 
 jobs:
   deploy:
-    if: github.actor == github.repository_owner
     runs-on: ubuntu-20.04
     strategy:
       fail-fast: true
       matrix:
-        arch: [aarch64, amd64, armv7hf]
+        fleet: [gh_klutchell/wireguard-aarch64, gh_klutchell/frigate-amd64, gh_klutchell/wireguard-armv7hf]
 
     steps:
       - uses: actions/checkout@v2
-      - uses: balena-io/deploy-to-balena-action@v0.5.5
+      - uses: balena-io/deploy-to-balena-action@klutchell/tag-on-finalize
         with:
           balena_token: ${{ secrets.BALENA_API_KEY }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           environment: balena-cloud.com
-          fleet: ${{ secrets.BALENA_FLEET_SLUG }}-${{ matrix.arch }}
+          fleet: ${{ matrix.fleet }}
           versionbot: false
           create_tag: true
