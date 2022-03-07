@@ -15,7 +15,7 @@ jobs:
         fleet: [gh_klutchell/wireguard-aarch64, gh_klutchell/frigate-amd64, gh_klutchell/wireguard-armv7hf]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: balena-io/deploy-to-balena-action@v0.7.0
         with:
           balena_token: ${{ secrets.BALENA_API_KEY }}
