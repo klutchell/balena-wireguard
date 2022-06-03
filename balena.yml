@@ -1,20 +1,17 @@
 name: WireGuard
 type: sw.application
-version: 1.1.4
+version: 1.1.5
 description: >-
   WireGuard is an extremely simple yet fast and modern VPN that utilizes
   state-of-the-art cryptography.
 post-provisioning: >-
   ## Usage instructions
 
-  Once your device joins the fleet you'll need to allow some time for it to
-  download the various services.
+  Once your device joins the fleet you'll need to allow some time for it to download the various services.
 
-  When it's done you can display QR codes for each peer by running `show-peer
-  <peer>` in the container shell.
+  When it's done you can display QR codes for each peer by running `show-peer <peer>` in the container shell.
 
-  Additional usage instructions for wireguard can be found here:
-  https://www.wireguard.com/
+  Additional usage instructions for wireguard can be found here: https://www.wireguard.com/
 assets:
   repository:
     type: blob.asset
