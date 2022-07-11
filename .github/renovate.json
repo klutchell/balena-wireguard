@@ -1,4 +1,6 @@
 {
-  "extends": ["config:base"],
+  "extends": [
+    "config:base"
+  ],
   "commitBody": "Change-type: patch"
 }
