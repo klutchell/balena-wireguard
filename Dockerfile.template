@@ -1,4 +1,4 @@
-FROM golang:1.18.2-alpine3.14 AS wireguard-go
+FROM golang:1.18.2-alpine3.16 AS wireguard-go
 
 # hadolint ignore=DL3018
 RUN apk add --no-cache curl build-base
@@ -13,7 +13,7 @@ RUN curl -fsSL https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-${WG_GO_
     make -C wireguard-go-${WG_GO_TAG} -j"$(nproc)" && \
     make -C wireguard-go-${WG_GO_TAG} install
 
-FROM alpine:3.14
+FROM alpine:3.16
 
 COPY --from=wireguard-go /usr/bin/wireguard-go /usr/bin/
 
