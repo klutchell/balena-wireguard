@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update golang Docker tag to v1.19.3
+      hash: d62c383a270d45ef1dc12cf8ba1c98760b3cbbd1
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.1.13
+  title: ""
+  date: 2022-11-01T19:42:14.261Z
+- commits:
     - subject: Update golang Docker tag to v1.19.2
       hash: 11e5eac584af81e5ebeb70ebfd20567b2a7fc04c
       body: ""
@@ -46,7 +58,7 @@
 - commits:
     - subject: Update golang Docker tag to v1.18.2
 - commits:
-    - ? body
+    - body: null
 - version: 1.1.8
 - date: 2022-09-27T22:12:40Z
 - commits:
@@ -59,7 +71,7 @@
 - commits:
     - subject: Update balena-io/deploy-to-balena-action action to v0.14.0
 - commits:
-    - ? body
+    - body: null
 - version: 1.1.7
 - date: 2022-07-21T22:21:26Z
 - commits:
@@ -72,7 +84,7 @@
 - commits:
     - subject: Update balena-io/deploy-to-balena-action action to v0.12.1
 - commits:
-    - ? body
+    - body: null
 - version: 1.1.6
 - date: 2022-07-11T22:33:15Z
 - commits:
@@ -85,7 +97,7 @@
 - commits:
     - subject: Update balena-io/deploy-to-balena-action action to v0.12.0
 - commits:
-    - ? body
+    - body: null
 - version: 1.1.5
 - date: 2022-06-03T17:01:08Z
 - commits:
@@ -98,7 +110,7 @@
 - commits:
     - subject: Update balena-io/deploy-to-balena-action action to v0.11.0
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: 59ee6f5a841e115fd74720b4b1a8be0c6285fa7a
 - commits:
@@ -109,7 +121,7 @@
 - commits:
     - subject: Update balena deploy action
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: 47b869f1651a72ab1050278f624f1e51f3de34cf
 - commits:
@@ -120,7 +132,7 @@
 - commits:
     - subject: Add renovate config
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: 2ecd1d64adff9c2811aaf433fd76a779c9295abb
 - commits:
@@ -190,8 +202,7 @@
     - subject: "patch: bump actions/checkout from 2 to 3"
 - commits:
     - body: >-
-        Bumps [actions/checkout](https://github.com/actions/checkout) from 2 to
-        3.
+        Bumps [actions/checkout](https://github.com/actions/checkout) from 2 to 3.
 
         - [Release notes](https://github.com/actions/checkout/releases)
 
@@ -250,7 +261,7 @@
 - commits:
     - subject: Update deploy-to-balena action
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: b2b3f0bc6014fab5a42c8e26295bc87ff0c4b765
 - commits:
@@ -261,7 +272,7 @@
 - commits:
     - subject: Update deploy-to-balena action
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: e6393d8f5fdcf494c9a2e4c781765974b32e8159
 - commits:
@@ -308,7 +319,7 @@
 - commits:
     - subject: Deploy to multiple architectures
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: 26c99dfdc07bd539de6740b47a98266906340215
 - commits:
@@ -319,7 +330,7 @@
 - commits:
     - subject: Remove stale workflow
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: 6ec90f2c966bf3c6bfe989d1865572c0302e088d
 - commits:
@@ -327,7 +338,7 @@
 - commits:
     - subject: update docs for generic x86 support
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: 7ac5b7bd19a29d60a298df6f25512643a1d9f001
 - commits:
@@ -335,7 +346,7 @@
 - commits:
     - subject: Update README.md
 - commits:
-    - ? body
+    - body: null
 - version: 1.1.2+rev3
 - date: 2021-09-29T12:58:18Z
 - commits:
@@ -345,7 +356,7 @@
 - commits:
     - subject: Don't error out if wireguard-go doesn't exist when removing it
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: b12b04ef2230685691aa6608acc42a824ff9792b
 - commits:
@@ -356,7 +367,7 @@
 - commits:
     - subject: Update run.sh
 - commits:
-    - ? body
+    - body: null
 - version: 1.1.2+rev2
 - date: 2021-09-27T19:32:21Z
 - commits:
@@ -366,7 +377,7 @@
 - commits:
     - subject: Allow passing ARG options to build kernel module from docker-compose file
 - commits:
-    - ? body
+    - body: null
 - version: 1.1.1+rev3
 - date: 2021-09-23T17:54:44Z
 - commits:
@@ -379,7 +390,7 @@
 - commits:
     - subject: Export release_version in same build step as balena push
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: 687a4640ef09fa94c263f79cc933ac020dd81a19
 - commits:
@@ -390,7 +401,7 @@
 - commits:
     - subject: Document balenaOS version 2.83.21+rev1 as supported
 - commits:
-    - ? body
+    - body: null
 - version: 1.1.1
 - date: 2021-09-23T16:58:23Z
 - commits:
@@ -406,7 +417,7 @@
 - commits:
     - subject: Optionally disable the wireguard-go userspace module
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: 2a1bd20757985feb3921cd3e2dfd74a1eed274b9
 - commits:
@@ -420,7 +431,7 @@
 - commits:
     - subject: Clean up insmod logging
 - commits:
-    - ? body
+    - body: null
 - version: 1.1.0
 - date: 2021-09-23T15:35:42Z
 - commits:
@@ -436,7 +447,7 @@
 - commits:
     - subject: Add support for Raspberry Pi 4 (using 64bit OS)
 - commits:
-    - ? body
+    - body: null
 - version: 1.0.0
 - date: 2021-09-23T14:59:58Z
 - commits:
@@ -452,7 +463,7 @@
 - commits:
     - subject: Build kernel module at runtime by default
 - commits:
-    - ? body
+    - body: null
 - version: 0.2.3+rev1
 - date: 2021-09-12T18:40:44Z
 - commits:
@@ -548,7 +559,7 @@
 - commits:
     - subject: Enable balena-versionist
 - commits:
-    - ? body
+    - body: null
 - version: 0.0.1
 - date: 2021-08-19T12:14:51Z
 - commits:
@@ -561,7 +572,7 @@
 - commits:
     - subject: Build from kernel_source rather than kernel_modules_headers
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: ad91132c0de025fb8928c6a2387258080e6f2a00
 - commits:
@@ -575,7 +586,7 @@
 - commits:
     - subject: Patch wireguard-linux-compat to skip kernel version check
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: ffd99c2ec48ca0ce225cc14a65108dd75dea747d
 - commits:
@@ -583,7 +594,7 @@
 - commits:
     - subject: Rename init script to run
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: 5450df3ab30f6d029b27e5f72cba06c5db3ec076
 - commits:
@@ -591,7 +602,7 @@
 - commits:
     - subject: print stats to tty
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: 9758f740b043bf8112ecc23275486b01c3adaf59
 - commits:
@@ -602,7 +613,7 @@
 - commits:
     - subject: Use ipcalc to determine valid network ranges
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: 2cd67b081efe14c09c37425f217dfd83ca8c1915
 - commits:
@@ -613,7 +624,7 @@
 - commits:
     - subject: Switch to alpine base image and include wireguard-go
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: 6325131674c53e8b0392ddd686afe9647d4acd45
 - commits:
@@ -624,7 +635,7 @@
 - commits:
     - subject: update to v1.0.20210424-ls30
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: 2219004330d3184a4c651de8db59326dec3e9949
 - commits:
@@ -635,7 +646,7 @@
 - commits:
     - subject: Cleanup readme and refer to linuxserver official docs
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: d8fcd374713c2e71e39be71416203119ba71c40b
 - commits:
@@ -646,7 +657,7 @@
 - commits:
     - subject: Clean up compose file to closely match linuxserver docs
 - commits:
-    - ? body
+    - body: null
 - commits:
     - hash: 292f52186e759c58105f71f60cb3f2ae4da7b2ad
 - commits:
@@ -657,4 +668,4 @@
 - commits:
     - subject: Don't unload existing wireguard modules
 - commits:
-    - ? body
+    - body: null
