@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update golang Docker tag to v1.19.4
+      hash: a54b93d20de953958d88adf291a9f9d3408dd621
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 1.1.14
+  title: ""
+  date: 2022-12-07T12:40:37.709Z
+- commits:
     - subject: Update golang Docker tag to v1.19.3
       hash: d62c383a270d45ef1dc12cf8ba1c98760b3cbbd1
       body: ""
