@@ -14,13 +14,4 @@ services:
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
     labels:
-      - io.balena.features.kernel-modules=1
-
-  # https://github.com/balenablocks/hostname
-  hostname:
-    image: balenablocks/hostname
-    restart: no
-    labels:
-      io.balena.features.supervisor-api: 1
-    environment:
-      SET_HOSTNAME: wireguard
+      io.balena.features.kernel-modules: "1"
