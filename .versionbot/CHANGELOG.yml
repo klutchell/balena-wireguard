@@ -1,4 +1,18 @@
 - commits:
+    - subject: Skip module build as balenaOS v2.106.8 includes it by default
+      hash: d39a8f91ed5d339fdca6906472bdcb90b4b81fd3
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Kyle Harding <kyle@balena.io>
+        signed-off-by: Kyle Harding <kyle@balena.io>
+      author: Kyle Harding
+      nested: []
+  version: 2.0.0
+  title: ""
+  date: 2023-01-06T19:08:11.745Z
+- commits:
     - subject: Update alpine Docker tag to v3.17
       hash: ee15ba63bc287d34c63c2f6ccd3ed65c32b0f121
       body: ""
