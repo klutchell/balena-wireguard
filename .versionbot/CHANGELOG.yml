@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update golang Docker tag to v1.19.5
+      hash: 1e146db6e6df293617735eb867d81301de4885b0
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 2.0.1
+  title: ""
+  date: 2023-01-11T12:55:41.991Z
+- commits:
     - subject: Skip module build as balenaOS v2.106.8 includes it by default
       hash: d39a8f91ed5d339fdca6906472bdcb90b4b81fd3
       body: ""
