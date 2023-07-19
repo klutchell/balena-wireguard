@@ -1,4 +1,16 @@
 - commits:
+    - subject: Pin dependencies
+      hash: 436ea99239538e149f373f03efb18429fa5e2b31
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 2.0.4
+  title: ""
+  date: 2023-07-19T12:29:07.158Z
+- commits:
     - subject: Update golang Docker tag to v1.20.3
       hash: b742fad04b986ea1d1d544a4534d0a6bf66aafeb
       body: ""
@@ -276,7 +288,8 @@
     - subject: "patch: bump actions/checkout from 2 to 3"
 - commits:
     - body: >-
-        Bumps [actions/checkout](https://github.com/actions/checkout) from 2 to 3.
+        Bumps [actions/checkout](https://github.com/actions/checkout) from 2 to
+        3.
 
         - [Release notes](https://github.com/actions/checkout/releases)
 
