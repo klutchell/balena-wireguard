@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update alpine Docker tag to v3.18
+      hash: 4758b9c15735ff03fa657a9d81d6bf0402d02abf
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 2.0.6
+  title: ""
+  date: 2023-07-19T13:25:58.921Z
+- commits:
     - subject: Update golang Docker tag to v1.20.4
       hash: 5c012ae9f15c29707adb457142568720a6a94bfb
       body: ""
