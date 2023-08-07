@@ -13,7 +13,7 @@ RUN curl -fsSL https://git.zx2c4.com/wireguard-go/snapshot/wireguard-go-${WG_GO_
     make -C wireguard-go-${WG_GO_TAG} -j"$(nproc)" && \
     make -C wireguard-go-${WG_GO_TAG} install
 
-FROM alpine:3.18@sha256:82d1e9d7ed48a7523bdebc18cf6290bdb97b82302a8a9c27d4fe885949ea94d1
+FROM alpine:3.18@sha256:7144f7bab3d4c2648d7e59409f15ec52a18006a128c733fcff20d3a4a54ba44a
 
 COPY --from=wireguard-go /usr/bin/wireguard-go /usr/bin/
 
