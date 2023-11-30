@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update alpine:3.18 Docker digest to 69e0a8b
+      hash: 706c823504117ddd2dfe84c492acebfec4cbfdf5
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 2.0.10
+  title: ""
+  date: 2023-11-30T23:40:50.330Z
+- commits:
     - subject: Update alpine:3.18 Docker digest to 3a24491
       hash: 3f3488ae842da7d1c6bd7ea1393639d8a44fe311
       body: ""
