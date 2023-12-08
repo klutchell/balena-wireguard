@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update alpine Docker tag to v3.19
+      hash: b84cbaa6d880f1c34ba976a7da1ea8c8702e23de
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 2.0.12
+  title: ""
+  date: 2023-12-08T02:22:33.689Z
+- commits:
     - subject: Update alpine:3.18 Docker digest to 34871e7
       hash: 96a675273f62d9c7dd9e8ee556e3310a23e77d4e
       body: ""
