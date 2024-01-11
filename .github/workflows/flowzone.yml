@@ -15,7 +15,6 @@ jobs:
       FLOWZONE_TOKEN: ${{ secrets.FLOWZONE_TOKEN }}
       BALENA_API_KEY: ${{ secrets.BALENA_API_KEY }}
     with:
-      protect_branch: false
       balena_slugs: |
         gh_klutchell/wireguard-amd64,
         gh_klutchell/wireguard-aarch64,
