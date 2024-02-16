@@ -1,4 +1,18 @@
 - commits:
+    - subject: Replace libqrencode with libqrencode-tools
+      hash: 865b7e930c46dc44e19e988bd397a468e6b66189
+      body: >
+        qrencode used to be part of libqrencode but now it's part of
+        libqrencode-tools
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Kyle Harding
+      nested: []
+  version: 2.0.17
+  title: ""
+  date: 2024-02-16T19:00:28.291Z
+- commits:
     - subject: Update alpine:3.19 Docker digest to c5b1261
       hash: b06cc95e6836f28ed1f58743d24499ed0ca9952f
       body: ""
