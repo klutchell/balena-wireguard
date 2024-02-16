@@ -31,7 +31,7 @@ RUN apk add --no-cache \
     kmod \
     openresolv \
     iproute2 \
-    libqrencode \
+    libqrencode-tools \
     gettext \
     ipcalc \
     openssl-dev \
