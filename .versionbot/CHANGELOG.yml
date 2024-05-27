@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update alpine Docker tag to v3.20
+      hash: 47e1b796719082c27d175749bb3940f1c295bf35
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Renovate Bot
+      nested: []
+  version: 2.0.18
+  title: ""
+  date: 2024-05-27T13:16:52.480Z
+- commits:
     - subject: Replace libqrencode with libqrencode-tools
       hash: 865b7e930c46dc44e19e988bd397a468e6b66189
       body: >
@@ -389,11 +401,14 @@
         [balena-io/deploy-to-balena-action](https://github.com/balena-io/deploy-to-balena-action)
         from 0.10.6 to 0.10.7.
 
-        - [Release notes](https://github.com/balena-io/deploy-to-balena-action/releases)
+        - [Release
+        notes](https://github.com/balena-io/deploy-to-balena-action/releases)
 
-        - [Changelog](https://github.com/balena-io/deploy-to-balena-action/blob/master/CHANGELOG.md)
+        -
+        [Changelog](https://github.com/balena-io/deploy-to-balena-action/blob/master/CHANGELOG.md)
 
-        - [Commits](https://github.com/balena-io/deploy-to-balena-action/compare/v0.10.6...v0.10.7)
+        -
+        [Commits](https://github.com/balena-io/deploy-to-balena-action/compare/v0.10.6...v0.10.7)
 
         ---
 
@@ -421,9 +436,11 @@
 
         - [Release notes](https://github.com/tmigone/versionist/releases)
 
-        - [Changelog](https://github.com/tmigone/versionist/blob/master/CHANGELOG.md)
+        -
+        [Changelog](https://github.com/tmigone/versionist/blob/master/CHANGELOG.md)
 
-        - [Commits](https://github.com/tmigone/versionist/compare/v0.4.6...v0.4.7)
+        -
+        [Commits](https://github.com/tmigone/versionist/compare/v0.4.6...v0.4.7)
 
         ---
 
@@ -451,7 +468,8 @@
 
         - [Release notes](https://github.com/actions/checkout/releases)
 
-        - [Changelog](https://github.com/actions/checkout/blob/main/CHANGELOG.md)
+        -
+        [Changelog](https://github.com/actions/checkout/blob/main/CHANGELOG.md)
 
         - [Commits](https://github.com/actions/checkout/compare/v2...v3)
 
@@ -480,11 +498,14 @@
         [balena-io/deploy-to-balena-action](https://github.com/balena-io/deploy-to-balena-action)
         from 0.7.0 to 0.8.4.
 
-        - [Release notes](https://github.com/balena-io/deploy-to-balena-action/releases)
+        - [Release
+        notes](https://github.com/balena-io/deploy-to-balena-action/releases)
 
-        - [Changelog](https://github.com/balena-io/deploy-to-balena-action/blob/master/CHANGELOG.md)
+        -
+        [Changelog](https://github.com/balena-io/deploy-to-balena-action/blob/master/CHANGELOG.md)
 
-        - [Commits](https://github.com/balena-io/deploy-to-balena-action/compare/v0.7.0...v0.8.4)
+        -
+        [Commits](https://github.com/balena-io/deploy-to-balena-action/compare/v0.7.0...v0.8.4)
 
         ---
 
@@ -530,11 +551,14 @@
         [balena-io/deploy-to-balena-action](https://github.com/balena-io/deploy-to-balena-action)
         from 0.5.1 to 0.5.5.
 
-        - [Release notes](https://github.com/balena-io/deploy-to-balena-action/releases)
+        - [Release
+        notes](https://github.com/balena-io/deploy-to-balena-action/releases)
 
-        - [Changelog](https://github.com/balena-io/deploy-to-balena-action/blob/master/CHANGELOG.md)
+        -
+        [Changelog](https://github.com/balena-io/deploy-to-balena-action/blob/master/CHANGELOG.md)
 
-        - [Commits](https://github.com/balena-io/deploy-to-balena-action/compare/v0.5.1...v0.5.5)
+        -
+        [Commits](https://github.com/balena-io/deploy-to-balena-action/compare/v0.5.1...v0.5.5)
 
         ---
 
@@ -772,9 +796,11 @@
 
         - [Release notes](https://github.com/tmigone/versionist/releases)
 
-        - [Changelog](https://github.com/tmigone/versionist/blob/master/CHANGELOG.md)
+        -
+        [Changelog](https://github.com/tmigone/versionist/blob/master/CHANGELOG.md)
 
-        - [Commits](https://github.com/tmigone/versionist/compare/v0.4.2...v0.4.6)
+        -
+        [Commits](https://github.com/tmigone/versionist/compare/v0.4.2...v0.4.6)
 
         ---
 
